@@ -1,0 +1,15 @@
+version: '3'
+services:
+    web:
+        image: nginx:stable-alpine
+        ports:
+            - "80:80"
+        volumes:
+            - ./nginx.conf:/etc/nginx/conf.d/nginx.conf
+            - ./app:/app
+    php:
+        build:
+            context: .
+            dockerfile: php.Dockerfile
+        volumes:
+            - ./app:/app
