@@ -1,0 +1,15 @@
+# dependencies
+/node_modules
+
+# build
+/build
+
+# testing
+/coverage
+
+### react ###
+.DS_*
+*.log
+logs
+**/*.backup.*
+**/*.back.*
