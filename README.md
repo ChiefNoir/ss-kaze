@@ -1,2 +1,2 @@
-# ss-kaze
-Karasu Zeitung
+#  SS-KAZE: Karasu Zeitung
+Minimalist blog of sorts
