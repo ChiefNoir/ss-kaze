@@ -1,6 +1,9 @@
 # TODO: users & permissions 
 FROM php:fpm-alpine
 
+ENV USERNAME=www-data
+ENV APP_HOME /var/www/html
+
 RUN apk add --no-cache\
       procps \
       icu-dev \
@@ -12,7 +15,8 @@ RUN apk add --no-cache\
       apk-cron \
       libzip-dev \
       libpq-dev \
-      linux-headers
+      linux-headers \
+      unzip
 
 RUN docker-php-ext-configure intl && docker-php-ext-install intl
 
@@ -30,5 +34,8 @@ RUN php composer-setup.php
 RUN mv composer.phar /usr/local/bin/composer
 RUN rm composer-setup.php
 
+RUN chown -R $USERNAME:$USERNAME $APP_HOME
+
 # laravel
-# composer create-project --prefer-dist laravel/laravel ./
+# composer create-project laravel/laravel ./
+# chown -R www-data:www-data html
