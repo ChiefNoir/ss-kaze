@@ -34,8 +34,8 @@ RUN php composer-setup.php
 RUN mv composer.phar /usr/local/bin/composer
 RUN rm composer-setup.php
 
-RUN chown -R $USERNAME:$USERNAME $APP_HOME
-
 # laravel
-# composer create-project laravel/laravel ./
+# RUN composer create-project laravel/laravel ./
 # chown -R www-data:www-data html
+
+RUN chown -R $USERNAME:$USERNAME $APP_HOME

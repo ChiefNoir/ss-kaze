@@ -28,9 +28,7 @@ services:
         volumes:
             - ./project:/var/www/html
             - ./docker/dev/php.ini:/usr/local/etc/php/php.ini
-#            - ./docker/dev/www.conf:/usr/local/etc/php-fpm.d/www.conf
-        ports:
-          - 9000:9000
+            - ./docker/dev/www.conf:/usr/local/etc/php-fpm.d/www.conf
         networks:
           - ss-network
 
