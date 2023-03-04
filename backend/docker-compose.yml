@@ -1,6 +1,6 @@
-# TODO: postgresql
-#       with healthcheck
-# TODO: postgresql conf
+#                     #
+# THIS IS DEV COMPOSE #
+#                     #
 version: '3.5'
 name: ss-kaze
 services:
@@ -8,7 +8,7 @@ services:
     nginx:
         image: nginx:stable-alpine
         container_name: nginx
-        restart: always
+        restart: unless-stopped
         ports:
             - "80:80"
         volumes:
@@ -21,7 +21,7 @@ services:
 
     php:
         container_name: php
-        restart: always
+        restart: unless-stopped
         build:
             context: .
             dockerfile: /docker/dev/php.Dockerfile
@@ -31,6 +31,54 @@ services:
             - ./docker/dev/www.conf:/usr/local/etc/php-fpm.d/www.conf
         networks:
           - ss-network
+
+    postgres:
+      image: postgres:alpine3.17
+      container_name: postgres
+      environment:
+        POSTGRES_DB: "kazedb"
+        POSTGRES_USER: "sa"
+        POSTGRES_PASSWORD: "sa"
+        PGDATA: "/var/lib/postgresql/data/pgdata"
+      volumes:
+        - ./docker/dev/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
+        - ./storage/data:/var/lib/postgresql/data
+      ports:
+        - "5432:5432"
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U sa -d kazedb"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+        start_period: 10s
+      restart: unless-stopped
+      deploy:
+        resources:
+          limits:
+            cpus: '1'
+            memory: 4G
+      networks:
+        - ss-network
+
+    pgadmin:
+      container_name: pgadmin
+      image: dpage/pgadmin4:latest
+      environment:
+        PGADMIN_DEFAULT_EMAIL: "sa@sa.com"
+        PGADMIN_DEFAULT_PASSWORD: "sa"
+        PGADMIN_CONFIG_SERVER_MODE: "False"
+      volumes:
+        - ./storage/pgadmin:/var/lib/pgadmin
+      ports:
+        - "5050:80"
+      restart: unless-stopped
+      deploy:
+        resources:
+          limits:
+            cpus: '0.5'
+            memory: 1G
+      networks:
+        - ss-network
 
 networks:
   ss-network:
