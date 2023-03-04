@@ -1,15 +1,39 @@
-version: '3'
+# TODO: postgresql
+#       with healthcheck
+# TODO: postgresql conf
+version: '3.5'
+name: ss-kaze
 services:
-    web:
+
+    nginx:
         image: nginx:stable-alpine
+        container_name: nginx
+        restart: always
         ports:
             - "80:80"
         volumes:
-            - ./nginx.conf:/etc/nginx/conf.d/nginx.conf
-            - ./app:/app
+            - ./project:/var/www/html
+            - ./docker/dev/nginx.conf:/etc/nginx/conf.d/nginx.conf
+        depends_on:
+          - php
+        networks:
+          - ss-network
+
     php:
+        container_name: php
+        restart: always
         build:
             context: .
-            dockerfile: php.Dockerfile
+            dockerfile: /docker/dev/php.Dockerfile
         volumes:
-            - ./app:/app
+            - ./project:/var/www/html
+            - ./docker/dev/php.ini:/usr/local/etc/php/php.ini
+#            - ./docker/dev/www.conf:/usr/local/etc/php-fpm.d/www.conf
+        ports:
+          - 9000:9000
+        networks:
+          - ss-network
+
+networks:
+  ss-network:
+    name: ss-network
