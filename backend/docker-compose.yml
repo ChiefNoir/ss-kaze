@@ -1,8 +1,6 @@
 # TODO: postgresql
 #       with healthcheck
 # TODO: postgresql conf
-# TODO: php.ini
-# TODO: fix nginx rights
 version: '3.5'
 name: ss-kaze
 services:
