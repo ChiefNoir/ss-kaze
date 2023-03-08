@@ -34,6 +34,13 @@ RUN php composer-setup.php
 RUN mv composer.phar /usr/local/bin/composer
 RUN rm composer-setup.php
 
+# xdebug
+RUN apk --no-cache add pcre-dev ${PHPIZE_DEPS} \ 
+  && pecl install xdebug \
+  && docker-php-ext-enable xdebug \
+  && apk del pcre-dev ${PHPIZE_DEPS}
+RUN docker-php-ext-enable xdebug
+
 # laravel
 # RUN composer create-project laravel/laravel ./
 # chown -R www-data:www-data html
