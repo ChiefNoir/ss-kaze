@@ -18,4 +18,4 @@
 /project/yarn-error.log
 /project/.fleet
 /project/.idea
-/project/.vscode
+.vscode
